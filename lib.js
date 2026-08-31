@@ -32,7 +32,25 @@ function isHeadlineText(text) {
   return t.includes(" ");
 }
 
-const AlreadyLib = { STRIP_PARAMS, normalizeUrl, isArticleHref, isHeadlineText };
+function dayNumber(ms) {
+  return Math.floor(ms / 86400000);
+}
+
+function shouldGrey(entry, threshold) {
+  return !!entry && (entry.r === 1 || entry.c >= threshold);
+}
+
+function pruneArticles(map, today, retentionDays) {
+  const out = {};
+  for (const [k, v] of Object.entries(map)) {
+    if (today - v.t <= retentionDays) out[k] = v;
+  }
+  return out;
+}
+
+const AlreadyLib = { STRIP_PARAMS, normalizeUrl, isArticleHref, isHeadlineText,
+  dayNumber, shouldGrey, pruneArticles
+};
 globalThis.AlreadyLib = AlreadyLib;
 // CJS export for node tests
 if (typeof module !== "undefined") module.exports = AlreadyLib;

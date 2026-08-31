@@ -44,3 +44,24 @@ test("isHeadlineText rejects short or empty text", () => {
   assert.equal(L.isHeadlineText(null), false);
   assert.equal(L.isHeadlineText("Supercalifragilistic"), false);
 });
+
+test("dayNumber converts ms to days", () => {
+  assert.equal(L.dayNumber(0), 0);
+  assert.equal(L.dayNumber(86400000 * 3 + 5), 3);
+});
+
+test("shouldGrey honors read flag and threshold", () => {
+  assert.equal(L.shouldGrey(undefined, 3), false);
+  assert.equal(L.shouldGrey({ c: 2, r: 0, t: 0 }, 3), false);
+  assert.equal(L.shouldGrey({ c: 3, r: 0, t: 0 }, 3), true);
+  assert.equal(L.shouldGrey({ c: 0, r: 1, t: 0 }, 3), true);
+});
+
+test("pruneArticles drops stale entries", () => {
+  const map = {
+    fresh: { c: 1, r: 0, t: 100 },
+    stale: { c: 5, r: 1, t: 10 }
+  };
+  const out = L.pruneArticles(map, 100, 60);
+  assert.deepEqual(Object.keys(out), ["fresh"]);
+});
