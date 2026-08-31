@@ -16,7 +16,23 @@ function normalizeUrl(href) {
   return u.origin + path + (q ? "?" + q : "");
 }
 
-const AlreadyLib = { STRIP_PARAMS, normalizeUrl };
+function isArticleHref(url) {
+  let u;
+  try { u = new URL(url); } catch { return false; }
+  const segs = u.pathname.split("/").filter(Boolean);
+  if (segs.length === 0) return false;
+  const last = segs[segs.length - 1].replace(/\.\w+$/, "");
+  if (/\d{4,}/.test(last)) return true;
+  return last.split("-").filter(Boolean).length >= 3;
+}
+
+function isHeadlineText(text) {
+  const t = (text || "").trim().replace(/\s+/g, " ");
+  if (t.length < 15 || t.length > 300) return false;
+  return t.includes(" ");
+}
+
+const AlreadyLib = { STRIP_PARAMS, normalizeUrl, isArticleHref, isHeadlineText };
 globalThis.AlreadyLib = AlreadyLib;
 // CJS export for node tests
 if (typeof module !== "undefined") module.exports = AlreadyLib;

@@ -21,3 +21,26 @@ test("normalizeUrl rejects non-http and garbage", () => {
   assert.equal(L.normalizeUrl("mailto:a@b.c"), null);
   assert.equal(L.normalizeUrl("not a url"), null);
 });
+
+test("isArticleHref accepts slug paths", () => {
+  assert.equal(L.isArticleHref("https://ex.com/politics/new-tax-law-passes"), true);
+  assert.equal(L.isArticleHref("https://ex.com/story-12345678.html"), true);
+});
+
+test("isArticleHref rejects sections and root", () => {
+  assert.equal(L.isArticleHref("https://ex.com/"), false);
+  assert.equal(L.isArticleHref("https://ex.com/politics"), false);
+  assert.equal(L.isArticleHref("https://ex.com/politics/economy"), false);
+  assert.equal(L.isArticleHref("garbage"), false);
+});
+
+test("isHeadlineText accepts real headlines", () => {
+  assert.equal(L.isHeadlineText("New tax law passes after long debate"), true);
+});
+
+test("isHeadlineText rejects short or empty text", () => {
+  assert.equal(L.isHeadlineText("More"), false);
+  assert.equal(L.isHeadlineText(""), false);
+  assert.equal(L.isHeadlineText(null), false);
+  assert.equal(L.isHeadlineText("Supercalifragilistic"), false);
+});
