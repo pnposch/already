@@ -3,8 +3,23 @@
   "name": "Already",
   "version": "0.1.0",
   "description": "Greys out news teasers you saw already.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "permissions": ["storage", "alarms", "scripting", "activeTab"],
   "optional_host_permissions": ["*://*/*"],
   "background": { "service_worker": "background.js" },
-  "action": { "default_popup": "popup.html", "default_title": "Already" }
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Already",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  }
 }
