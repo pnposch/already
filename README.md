@@ -19,6 +19,13 @@ visited articles grey out immediately. All data stays local.
 3. Adjust threshold, dwell time, mode, and retention in the popup.
 4. "Reset data for this site" clears its history.
 
+## Design
+
+The popup follows an "ink density" visual world: articles are ink,
+repeated exposure drains it. A halftone gauge shows tracked and
+faded counts per site. Fonts (Libre Franklin, Fragment Mono) are
+bundled in `fonts/`. See `DESIGN.md`.
+
 ## Development
 
 - No build step. Pure logic lives in `lib.js`.
