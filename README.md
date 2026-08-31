@@ -22,7 +22,7 @@ visited articles grey out immediately. All data stays local.
 ## Development
 
 - No build step. Pure logic lives in `lib.js`.
-- Tests: `node --test test/`
+- Tests: `node --test`
 - Manual fixture: `python3 -m http.server 8000 --directory test`,
   then enable Already on `http://localhost:8000/fixture.html`.
 

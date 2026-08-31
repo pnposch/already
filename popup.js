@@ -55,9 +55,15 @@ $("toggle").addEventListener("change", async (e) => {
   } else {
     const i = sites.indexOf(host);
     if (i >= 0) sites.splice(i, 1);
+    // Revoke host permission best-effort.
+    try {
+      await chrome.permissions.remove({ origins: ["*://" + host + "/*"] });
+    } catch { }
   }
   await chrome.storage.local.set({ sites });
-  await syncScripts(sites);
+  try {
+    await syncScripts(sites);
+  } catch { }
 });
 
 async function saveSettings() {
