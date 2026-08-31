@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@font-face { font-family: "Libre Franklin"; src: url(../fonts/libre-franklin.woff2) format("woff2"); font-weight: 100 900; }
+@font-face { font-family: "Fragment Mono"; src: url(../fonts/fragment-mono.woff2) format("woff2"); }
+* { margin: 0; box-sizing: border-box; }
+body {
+  width: 1280px; height: 800px; overflow: hidden;
+  background: #EDEAE2; color: #1A1917;
+  font-family: "Libre Franklin", sans-serif;
+  padding: 56px 90px;
+}
+h1 { font-size: 44px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.01em; }
+.cols { display: flex; gap: 60px; margin-top: 40px; }
+.col { flex: 1; }
+.col-label { font: 400 13px/1 "Fragment Mono", monospace; letter-spacing: 0.16em; text-transform: uppercase; color: #615D53; padding-bottom: 12px; border-bottom: 1px solid #1A1917; margin-bottom: 20px; }
+.col-label b { color: #006D87; font-weight: 400; }
+.card { border: 1px solid #B7B2A6; padding: 18px 20px; margin-bottom: 16px; background: #F2F0E9; }
+.kick { font: 400 10px/1 "Fragment Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #615D53; }
+.hl { font-size: 19px; font-weight: 600; line-height: 1.25; margin-top: 7px; }
+.faded { opacity: 0.35; filter: grayscale(1); }
+.gone { border: 1px dashed #B7B2A6; background: transparent; padding: 10px 20px; }
+.gone .kick { color: #B7B2A6; }
+.note { margin-top: 26px; font: 400 12px/1 "Fragment Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; color: #615D53; text-align: center; }
+</style>
+</head>
+<body>
+  <h1>Only the new survives</h1>
+  <div class="cols">
+    <div class="col">
+      <div class="col-label">First visit</div>
+      <div class="card"><div class="kick">Politics</div><div class="hl">City council debates new bike lane network</div></div>
+      <div class="card"><div class="kick">Economy</div><div class="hl">Rail operator announces winter timetable changes</div></div>
+      <div class="card"><div class="kick">Science</div><div class="hl">Researchers map river deltas from orbit</div></div>
+      <div class="card"><div class="kick">Culture</div><div class="hl">Museum reopens with restored east wing</div></div>
+    </div>
+    <div class="col">
+      <div class="col-label">Third visit &middot; <b>mode: dim / hide</b></div>
+      <div class="card faded"><div class="kick">Politics</div><div class="hl">City council debates new bike lane network</div></div>
+      <div class="card"><div class="kick">Breaking</div><div class="hl">Storm front expected to reach the coast tonight</div></div>
+      <div class="gone"><div class="kick">Hidden &middot; seen 3&times;</div></div>
+      <div class="card faded"><div class="kick">Culture</div><div class="hl">Museum reopens with restored east wing</div></div>
+    </div>
+  </div>
+  <p class="note">Demo content &middot; your reading data never leaves the browser</p>
+</body>
+</html>

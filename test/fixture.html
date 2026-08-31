@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Fixture News</title>
+  <style>
+    main { max-width: 600px; margin: 0 auto; }
+    article { border: 1px solid #ccc; margin: 16px 0; padding: 12px; min-height: 40vh; }
+    nav a { margin-right: 12px; }
+  </style>
+</head>
+<body>
+  <nav><a href="/politics/">Politics</a> <a href="/sports/">Sports</a></nav>
+  <main id="feed"></main>
+  <section id="feed2">
+    <div class="tz-a" style="border:1px dashed #999;margin:16px 0;padding:12px;min-height:30vh">
+      <span class="kick-x">OPINION</span>
+      <h3 class="hl-a"><a href="/politics/fallback-card-story-example-one">Fallback layout headline for card story one</a></h3>
+    </div>
+    <div class="tz-b" style="border:1px dashed #999;margin:16px 0;padding:12px;min-height:30vh">
+      <span class="kick-y">ANALYSIS</span>
+      <h3 class="hl-b"><a href="/politics/fallback-card-story-example-two">Fallback layout headline for card story two</a></h3>
+    </div>
+  </section>
+  <button id="more">Load more</button>
+  <script>
+    let n = 0;
+    function addCards(count) {
+      for (let i = 0; i < count; i++) {
+        n++;
+        const el = document.createElement("article");
+        el.innerHTML = '<a href="/politics/story-about-topic-number-' + n + '">'
+          + 'Extended headline text for fixture story number ' + n + '</a>';
+        document.getElementById("feed").append(el);
+      }
+    }
+    addCards(12);
+    document.getElementById("more").onclick = () => addCards(6);
+  </script>
+</body>
+</html>

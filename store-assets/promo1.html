@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@font-face { font-family: "Libre Franklin"; src: url(../fonts/libre-franklin.woff2) format("woff2"); font-weight: 100 900; }
+@font-face { font-family: "Fragment Mono"; src: url(../fonts/fragment-mono.woff2) format("woff2"); }
+* { margin: 0; box-sizing: border-box; }
+body {
+  width: 1280px; height: 800px; overflow: hidden;
+  background: radial-gradient(circle at 15% 10%, rgba(26,25,23,0.04), transparent 45%), #EDEAE2;
+  color: #1A1917; font-family: "Libre Franklin", sans-serif;
+  display: flex; align-items: center; gap: 70px; padding: 0 90px;
+}
+.left { flex: 1; }
+h1 { font-size: 110px; font-weight: 900; letter-spacing: -0.02em; text-transform: uppercase; line-height: 0.95; }
+.rule { height: 4px; background: #1A1917; width: 130px; margin: 30px 0; }
+.tag { font-size: 30px; font-weight: 600; line-height: 1.3; max-width: 480px; }
+.facts { margin-top: 38px; font: 400 14px/2.2 "Fragment Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: #615D53; }
+.facts b { color: #006D87; font-weight: 400; }
+.shot { position: relative; flex: none; }
+.shot img { display: block; width: 400px; border: 2px solid #1A1917; }
+.reg { position: absolute; width: 14px; height: 14px; color: #B7B2A6; }
+.reg.tl { top: -26px; left: -26px; } .reg.br { bottom: -26px; right: -26px; }
+</style>
+</head>
+<body>
+  <div class="left">
+    <h1>Already</h1>
+    <div class="rule"></div>
+    <p class="tag">Fades the news teasers you have already seen.</p>
+    <p class="facts">
+      Counts real sightings, not clicks<br>
+      Dim or hide &middot; per-site opt-in<br>
+      <b>100% local &middot; no accounts &middot; no tracking</b>
+    </p>
+  </div>
+  <div class="shot">
+    <svg class="reg tl" viewBox="0 0 11 11"><circle cx="5.5" cy="5.5" r="3.2" fill="none" stroke="currentColor"/><path d="M5.5 0v11M0 5.5h11" stroke="currentColor"/></svg>
+    <img src="popup.png" alt="Already popup">
+    <svg class="reg br" viewBox="0 0 11 11"><circle cx="5.5" cy="5.5" r="3.2" fill="none" stroke="currentColor"/><path d="M5.5 0v11M0 5.5h11" stroke="currentColor"/></svg>
+  </div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Already</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<!--
+THESIS: Articles are ink; repeated exposure drains it. The popup is the
+press-control strip metering that fade. Refuses: white settings card
+with a blue toggle.
+OWN-WORLD: Uncoated newsprint #EDEAE2, process ink #1A1917, one cyan
+band (#00A5CE on ink, #006D87 on paper); halftone dot ramps; hairlines;
+Libre Franklin masthead/body, Fragment Mono gauge digits; controls as
+printed zero-radius marks that ink themselves.
+STORY: Reader glances: is the press running here, how much ink is left;
+flips the press switch, tunes exposure counts, wipes the plate.
+FIRST VIEWPORT: Ink masthead with press lamp; site slugline; halftone
+densitometer gauge with needle and tracked/faded readouts; press
+switch; three stepper controls with mono readouts; self-demonstrating
+DIM/HIDE chips; wipe-plate mark; registration colophon.
+FORM: Halftone ink density, candidate 7/7, seed bc036b5a.
+FINISH: unreviewed and undocumented is unfinished; this build ends with
+the finish review, the verdict, DESIGN.md, and every shipping raster
+carrying its provenance.
+-->
+<header class="masthead">
+  <h1>Already</h1>
+  <output id="lamp" class="lamp">Idle</output>
+</header>
+
+<p id="site" class="slugline"></p>
+
+<section class="gauge" aria-label="Ink remaining for this site">
+  <div class="ramp" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+    <span id="needle" class="needle"></span>
+  </div>
+  <dl class="readouts">
+    <div><dt>Tracked</dt><dd id="statTracked">–</dd></div>
+    <div><dt>Faded</dt><dd id="statFaded">–</dd></div>
+  </dl>
+</section>
+
+<label class="press">
+  <input type="checkbox" id="toggle">
+  <span class="lever" aria-hidden="true"><i></i></span>
+  <span class="press-name">Enable on this site</span>
+</label>
+
+<section class="controls">
+  <div class="ctl">
+    <label class="ctl-name" for="threshold">Views before fade</label>
+    <div class="ctl-io">
+      <button class="step" data-for="threshold" data-dir="-1" aria-label="Fewer views">&minus;</button>
+      <input id="threshold" type="number" min="1" max="99" step="1">
+      <button class="step" data-for="threshold" data-dir="1" aria-label="More views">+</button>
+    </div>
+  </div>
+  <div class="ctl">
+    <label class="ctl-name" for="dwellMs">Dwell time &middot; ms</label>
+    <div class="ctl-io">
+      <button class="step" data-for="dwellMs" data-dir="-1" aria-label="Shorter dwell">&minus;</button>
+      <input id="dwellMs" type="number" min="0" max="9900" step="100">
+      <button class="step" data-for="dwellMs" data-dir="1" aria-label="Longer dwell">+</button>
+    </div>
+  </div>
+  <div class="ctl">
+    <label class="ctl-name" for="retentionDays">Keep data &middot; days</label>
+    <div class="ctl-io">
+      <button class="step" data-for="retentionDays" data-dir="-1" aria-label="Fewer days">&minus;</button>
+      <input id="retentionDays" type="number" min="1" max="999" step="1">
+      <button class="step" data-for="retentionDays" data-dir="1" aria-label="More days">+</button>
+    </div>
+  </div>
+  <fieldset class="mode">
+    <legend class="ctl-name">Fade mode</legend>
+    <label class="chip chip-dim">
+      <input type="radio" name="mode" value="dim">
+      <span><b class="demo">Dim</b></span>
+    </label>
+    <label class="chip chip-hide">
+      <input type="radio" name="mode" value="hide">
+      <span><b class="demo">Hide</b></span>
+    </label>
+  </fieldset>
+</section>
+
+<button id="reset" class="wipe">Wipe this site&rsquo;s data</button>
+
+<footer class="colophon">
+  <svg class="reg" width="11" height="11" viewBox="0 0 11 11" aria-hidden="true">
+    <circle cx="5.5" cy="5.5" r="3.2" fill="none" stroke="currentColor" stroke-width="1"/>
+    <path d="M5.5 0v11M0 5.5h11" stroke="currentColor" stroke-width="1"/>
+  </svg>
+  <span>V&nbsp;0.1.0 &middot; Data stays local</span>
+  <svg class="reg" width="11" height="11" viewBox="0 0 11 11" aria-hidden="true">
+    <circle cx="5.5" cy="5.5" r="3.2" fill="none" stroke="currentColor" stroke-width="1"/>
+    <path d="M5.5 0v11M0 5.5h11" stroke="currentColor" stroke-width="1"/>
+  </svg>
+</footer>
+
+<script src="popup.js"></script>
+</body>
+</html>
