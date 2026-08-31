@@ -71,6 +71,33 @@
     return a;
   }
 
+  const counted = new Set();
+  const timers = new Map();
+
+  const io = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+
+  function onIntersect(entries) {
+    for (const e of entries) {
+      const key = e.target.dataset.alreadyKey;
+      if (!key || counted.has(key)) continue;
+      if (e.isIntersecting) {
+        timers.set(key, setTimeout(() => countImpression(key), settings.dwellMs));
+      } else {
+        clearTimeout(timers.get(key));
+        timers.delete(key);
+      }
+    }
+  }
+
+  function countImpression(key) {
+    if (counted.has(key)) return;
+    counted.add(key);
+    const en = entryFor(key);
+    en.c += 1;
+    en.t = L.dayNumber(Date.now());
+    saveSoon();
+  }
+
   function scan() {
     for (const a of document.querySelectorAll("a[href]")) {
       const key = L.normalizeUrl(a.href);
@@ -82,6 +109,8 @@
       card.dataset.alreadyKey = key;
       if (L.shouldGrey(articles[key], settings.threshold)) {
         card.dataset.already = settings.mode;
+      } else {
+        io.observe(card);
       }
     }
   }
