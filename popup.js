@@ -1,5 +1,4 @@
 const $ = (id) => document.getElementById(id);
-let origin = null;
 let host = null;
 
 async function init() {
@@ -10,7 +9,6 @@ async function init() {
     $("site").textContent = "Not available on this page";
     $("toggle").disabled = true;
   } else {
-    origin = url.origin;
     host = url.hostname;
     $("site").textContent = host;
   }
@@ -42,7 +40,7 @@ async function syncScripts(sites) {
 $("toggle").addEventListener("change", async (e) => {
   const { sites = [] } = await chrome.storage.local.get("sites");
   if (e.target.checked) {
-    const ok = await chrome.permissions.request({ origins: [origin + "/*"] });
+    const ok = await chrome.permissions.request({ origins: ["*://" + host + "/*"] });
     if (!ok) { e.target.checked = false; return; }
     if (!sites.includes(host)) sites.push(host);
   } else {
