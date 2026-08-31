@@ -1,2 +1,7 @@
 .impeccable/review/
 dist/
+.impeccable/
+.superpowers/
+docs/superpowers/
+PRODUCT.md
+DESIGN.md

@@ -65,8 +65,7 @@ Works on Chrome, Brave, Edge, and other Chromium browsers (MV3).
 The popup follows an "ink density" visual world: articles are
 ink, repeated exposure drains it. A halftone gauge shows tracked
 and faded counts per site. Fonts (Libre Franklin, Fragment Mono)
-are bundled locally. See `DESIGN.md` and
-[docs/superpowers/specs](docs/superpowers/specs/2026-08-31-already-design.md).
+are bundled locally.
 
 ## License
 
