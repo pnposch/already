@@ -1,0 +1,12 @@
+[data-already="dim"] {
+  opacity: 0.35;
+  filter: grayscale(1);
+  transition: opacity 0.2s, filter 0.2s;
+}
+[data-already="dim"]:hover {
+  opacity: 1;
+  filter: none;
+}
+[data-already="hide"] {
+  display: none !important;
+}

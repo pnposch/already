@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Already",
+  "version": "0.1.0",
+  "description": "Greys out news teasers you saw already.",
+  "permissions": ["storage", "alarms", "scripting", "activeTab"],
+  "optional_host_permissions": ["*://*/*"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html", "default_title": "Already" }
+}
