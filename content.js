@@ -98,6 +98,21 @@
     saveSoon();
   }
 
+  function markRead(key) {
+    const en = entryFor(key);
+    en.r = 1;
+    saveSoon();
+  }
+
+  let scanTimer = null;
+
+  function debounceScan() {
+    clearTimeout(scanTimer);
+    scanTimer = setTimeout(scan, 300);
+  }
+
+  const mo = new MutationObserver(debounceScan);
+
   function scan() {
     for (const a of document.querySelectorAll("a[href]")) {
       const key = L.normalizeUrl(a.href);
@@ -107,6 +122,7 @@
       if (processed.has(card)) continue;
       processed.add(card);
       card.dataset.alreadyKey = key;
+      card.addEventListener("mousedown", () => markRead(key));
       if (L.shouldGrey(articles[key], settings.threshold)) {
         card.dataset.already = settings.mode;
       } else {
@@ -118,7 +134,10 @@
   async function main() {
     try {
       await loadState();
+      const self = L.normalizeUrl(location.href);
+      if (self && articles[self]) markRead(self);
       scan();
+      mo.observe(document.body, { childList: true, subtree: true });
       addEventListener("pagehide", flush);
     } catch (e) {
       console.warn("Already: disabled on error", e);
