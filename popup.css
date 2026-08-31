@@ -1,0 +1,6 @@
+body { min-width: 260px; font: 14px system-ui; padding: 12px; }
+h1 { font-size: 16px; margin: 0 0 8px; }
+#site { color: #666; margin-bottom: 8px; }
+.row { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+.row input[type="number"], .row select { margin-left: auto; width: 80px; }
+button { margin-top: 8px; }
