@@ -10,6 +10,23 @@
   <label class="row">
     <input type="checkbox" id="toggle"> Enable on this site
   </label>
+  <hr>
+  <label class="row">Views before grey-out
+    <input type="number" id="threshold" min="1" max="99">
+  </label>
+  <label class="row">Dwell time (ms)
+    <input type="number" id="dwellMs" min="0" step="100">
+  </label>
+  <label class="row">Mode
+    <select id="mode">
+      <option value="dim">Dim</option>
+      <option value="hide">Hide</option>
+    </select>
+  </label>
+  <label class="row">Keep data (days)
+    <input type="number" id="retentionDays" min="1">
+  </label>
+  <button id="reset">Reset data for this site</button>
   <script src="popup.js"></script>
 </body>
 </html>

@@ -14,6 +14,15 @@ async function init() {
   }
   const { sites = [] } = await chrome.storage.local.get("sites");
   $("toggle").checked = host !== null && sites.includes(host);
+  const { settings = {} } = await chrome.storage.local.get("settings");
+  const s = {
+    threshold: 3, dwellMs: 1000, mode: "dim", retentionDays: 60,
+    ...settings
+  };
+  $("threshold").value = s.threshold;
+  $("dwellMs").value = s.dwellMs;
+  $("mode").value = s.mode;
+  $("retentionDays").value = s.retentionDays;
 }
 
 async function syncScripts(sites) {
@@ -49,6 +58,25 @@ $("toggle").addEventListener("change", async (e) => {
   }
   await chrome.storage.local.set({ sites });
   await syncScripts(sites);
+});
+
+async function saveSettings() {
+  await chrome.storage.local.set({ settings: {
+    threshold: +$("threshold").value,
+    dwellMs: +$("dwellMs").value,
+    mode: $("mode").value,
+    retentionDays: +$("retentionDays").value
+  }});
+}
+
+for (const id of ["threshold", "dwellMs", "mode", "retentionDays"]) {
+  $(id).addEventListener("change", saveSettings);
+}
+
+$("reset").addEventListener("click", async () => {
+  if (host === null) return;
+  await chrome.storage.local.remove("art:" + host);
+  $("reset").textContent = "Data cleared";
 });
 
 init();
