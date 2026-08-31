@@ -49,26 +49,40 @@
     return articles[key];
   }
 
-  function hasTwinSibling(el) {
-    const cls = el.className;
-    if (typeof cls !== "string" || !cls) return false;
-    for (const sib of el.parentElement?.children || []) {
-      if (sib !== el && sib.tagName === el.tagName && sib.className === cls) {
-        return true;
-      }
-    }
-    return false;
+  function isCandidate(a) {
+    const key = L.normalizeUrl(a.href);
+    if (!key || !L.isArticleHref(key)) return null;
+    if (!L.isHeadlineText(a.textContent)) return null;
+    return key;
   }
 
-  function findCard(a) {
+  const STOP_TAGS = new Set(
+    ["BODY", "MAIN", "NAV", "HEADER", "FOOTER", "FORM", "SECTION", "ASIDE"]
+  );
+
+  // Card: widest ancestor holding no foreign article
+  function findCard(a, key, cands) {
     const semantic = a.closest("article, li");
     if (semantic) return semantic;
     let el = a;
-    for (let i = 0; i < 4 && el.parentElement; i++) {
-      el = el.parentElement;
-      if (hasTwinSibling(el)) return el;
+    for (let i = 0; i < 6; i++) {
+      const p = el.parentElement;
+      if (!p || STOP_TAGS.has(p.tagName)) break;
+      const foreign = cands.some(
+        (c) => c[0] !== a && c[1] !== key && p.contains(c[0])
+      );
+      if (foreign) break;
+      el = p;
     }
-    return a;
+    return el;
+  }
+
+  function applyState(card, key) {
+    if (L.shouldGrey(articles[key], settings.threshold)) {
+      card.dataset.already = settings.mode;
+    } else {
+      delete card.dataset.already;
+    }
   }
 
   const counted = new Set();
@@ -114,22 +128,30 @@
   const mo = new MutationObserver(debounceScan);
 
   function scan() {
+    const cands = [];
     for (const a of document.querySelectorAll("a[href]")) {
-      const key = L.normalizeUrl(a.href);
-      if (!key || !L.isArticleHref(key)) continue;
-      if (!L.isHeadlineText(a.textContent)) continue;
-      const card = findCard(a);
+      const key = isCandidate(a);
+      if (key) cands.push([a, key]);
+    }
+    for (const [a, key] of cands) {
+      const card = findCard(a, key, cands);
       if (processed.has(card)) continue;
       processed.add(card);
       card.dataset.alreadyKey = key;
       card.addEventListener("mousedown", () => markRead(key));
-      if (L.shouldGrey(articles[key], settings.threshold)) {
-        card.dataset.already = settings.mode;
-      } else {
-        io.observe(card);
-      }
+      applyState(card, key);
+      if (!card.dataset.already) io.observe(card);
     }
   }
+
+  // Popup settings changes restyle immediately
+  chrome.storage.onChanged.addListener((ch, area) => {
+    if (area !== "local" || !ch.settings) return;
+    settings = { ...DEFAULTS, ...(ch.settings.newValue || {}) };
+    for (const card of document.querySelectorAll("[data-already-key]")) {
+      applyState(card, card.dataset.alreadyKey);
+    }
+  });
 
   async function main() {
     try {
