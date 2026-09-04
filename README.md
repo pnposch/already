@@ -42,6 +42,33 @@ and fades it out — so only the new survives.
 
 Works on Chrome, Brave, Edge, and other Chromium browsers (MV3).
 
+## Android
+
+Brave and Chrome for Android run no extensions at all — Brave's
+official position is still "TBD", and Chrome has never shipped it
+on phones. Use a Chromium browser that supports extensions:
+
+| Browser | Works? |
+|---|---|
+| [Lemur](https://play.google.com/store/apps/details?id=com.lemurbrowser.exts) | Yes — installs a local `.zip` or `.crx` |
+| [Quetta](https://www.quetta.net) | Store installs only, so not before release |
+| Chrome "Desktop Android" | Sideloaded APK, phones out of scope, clunky |
+| Edge for Android | Curated allowlist, no sideloading |
+| Firefox for Android | Gecko — needs a port and a signed XPI |
+| Brave for Android | Not possible today |
+
+**On Lemur:**
+
+1. `bash scripts/package.sh` → `dist/already-<version>.zip`
+2. Copy the zip to the phone's `Downloads`.
+3. Menu **⋮ → Extensions**, enable developer mode, install from
+   file, pick the zip.
+4. Open a news site, then **⋮ → Already** to enable the site.
+
+Mobile has no toolbar icon — the popup lives in the ⋮ menu. A
+teaser also fills far more of a phone screen, so the 50% rule
+triggers sooner; raise the dwell time if pages fade too fast.
+
 ## Settings
 
 | Setting | Default | Meaning |
