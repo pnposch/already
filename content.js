@@ -49,7 +49,18 @@
     return articles[key];
   }
 
+  const LISTING = L.listingSite(HOST);
+
+  function keyOf(href) {
+    return LISTING ? L.listingKey(LISTING, href) : L.normalizeUrl(href);
+  }
+
   function isCandidate(a) {
+    // Skip self-links on detail pages
+    if (LISTING) {
+      const key = keyOf(a.href);
+      return key !== keyOf(location.href) ? key : null;
+    }
     const key = L.normalizeUrl(a.href);
     if (!key || !L.isArticleHref(key)) return null;
     if (!L.isHeadlineText(a.textContent)) return null;
@@ -127,21 +138,29 @@
 
   const mo = new MutationObserver(debounceScan);
 
+  function track(card, key) {
+    if (processed.has(card)) return;
+    processed.add(card);
+    card.dataset.alreadyKey = key;
+    card.addEventListener("mousedown", () => markRead(key));
+    applyState(card, key);
+    if (!card.dataset.already) io.observe(card);
+  }
+
   function scan() {
+    if (LISTING && LISTING.card) {
+      const self = keyOf(location.href);
+      for (const card of document.querySelectorAll(LISTING.card)) {
+        const key = card.getAttribute(LISTING.attr);
+        if (key && key !== self) track(card, key);
+      }
+    }
     const cands = [];
     for (const a of document.querySelectorAll("a[href]")) {
       const key = isCandidate(a);
       if (key) cands.push([a, key]);
     }
-    for (const [a, key] of cands) {
-      const card = findCard(a, key, cands);
-      if (processed.has(card)) continue;
-      processed.add(card);
-      card.dataset.alreadyKey = key;
-      card.addEventListener("mousedown", () => markRead(key));
-      applyState(card, key);
-      if (!card.dataset.already) io.observe(card);
-    }
+    for (const [a, key] of cands) track(findCard(a, key, cands), key);
   }
 
   // Popup settings changes restyle immediately
@@ -156,7 +175,7 @@
   async function main() {
     try {
       await loadState();
-      const self = L.normalizeUrl(location.href);
+      const self = keyOf(location.href);
       if (self && articles[self]) markRead(self);
       scan();
       mo.observe(document.body, { childList: true, subtree: true });

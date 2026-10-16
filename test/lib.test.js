@@ -65,3 +65,29 @@ test("pruneArticles drops stale entries", () => {
   const out = L.pruneArticles(map, 100, 60);
   assert.deepEqual(Object.keys(out), ["fresh"]);
 });
+
+test("listingKey extracts classifieds IDs", () => {
+  const cases = [
+    ["suchen.mobile.de", "https://suchen.mobile.de/fahrzeuge/details.html?id=420206823&dam=false&ref=srp", "420206823"],
+    ["suchen.mobile.de", "https://suchen.mobile.de/fahrzeuge/details.html?ref=srp&id=420206823", "420206823"],
+    ["suchen.mobile.de", "https://suchen.mobile.de/auto-inserat/bmw-520da-touring-neuwied/419397745.html", "419397745"],
+    ["www.autoscout24.de", "https://www.autoscout24.de/angebote/hyundai-ioniq-5-dynamiq-elektro-weiss-cat_ma33gr75824ge924va3320mt2267tr2682-7bdc5300-3a92-427a-8f02-2a8d1e83b9c7?sort=age&position=5", "7bdc5300-3a92-427a-8f02-2a8d1e83b9c7"],
+    ["www.autoscout24.de", "https://www.autoscout24.de/smyle/details/08f1d0a5-cc3c-474b-816a-baa6f6a8cd7d/", "08f1d0a5-cc3c-474b-816a-baa6f6a8cd7d"],
+    ["www.autouncle.de", "https://www.autouncle.de/de/d/225298031-gebraucht-2025-hyundai-ioniq-5-techniq-228-ps", "225298031"],
+    ["www.autouncle.de", "https://www.autouncle.de/de/das_wiedersehen/auto-bayer-de/225298031/415105191?ref=x", "225298031"]
+  ];
+  for (const [host, href, id] of cases) {
+    assert.equal(L.listingKey(L.listingSite(host), href), id, href);
+  }
+});
+
+test("listingKey rejects non-listing links", () => {
+  assert.equal(L.listingKey(L.listingSite("suchen.mobile.de"), "https://suchen.mobile.de/auto/hyundai-ioniq-5-2023.html"), null);
+  assert.equal(L.listingKey(L.listingSite("www.autoscout24.de"), "https://www.autoscout24.de/haendler/autohaus-koerner-gmbh"), null);
+  assert.equal(L.listingKey(L.listingSite("www.autouncle.de"), "https://www.autouncle.de/de/gebrauchtwagen/Hyundai/Ioniq-5"), null);
+});
+
+test("listingSite ignores news hosts", () => {
+  assert.equal(L.listingSite("www.spiegel.de"), null);
+  assert.equal(L.listingSite("notmobile.de"), null);
+});
