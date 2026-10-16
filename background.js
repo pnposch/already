@@ -1,8 +1,36 @@
 // Daily cleanup and tab badge
 importScripts("lib.js");
 
+// Reload and update drop dynamic scripts
+async function syncScripts() {
+  const { sites = [] } = await chrome.storage.local.get("sites");
+  const existing = await chrome.scripting.getRegisteredContentScripts(
+    { ids: ["already"] }
+  );
+  if (sites.length === 0) {
+    if (existing.length) {
+      await chrome.scripting.unregisterContentScripts({ ids: ["already"] });
+    }
+    return;
+  }
+  const script = {
+    id: "already",
+    matches: sites.map((h) => "*://" + h + "/*"),
+    js: ["lib.js", "content.js"],
+    css: ["content.css"],
+    runAt: "document_idle"
+  };
+  if (existing.length) await chrome.scripting.updateContentScripts([script]);
+  else await chrome.scripting.registerContentScripts([script]);
+}
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create("cleanup", { periodInMinutes: 1440 });
+  syncScripts();
+});
+
+chrome.storage.onChanged.addListener((ch, area) => {
+  if (area === "local" && ch.sites) syncScripts();
 });
 
 async function runCleanup() {

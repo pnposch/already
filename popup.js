@@ -63,27 +63,6 @@ async function init() {
   loadStats();
 }
 
-async function syncScripts(sites) {
-  const existing = await chrome.scripting.getRegisteredContentScripts(
-    { ids: ["already"] }
-  );
-  if (sites.length === 0) {
-    if (existing.length) {
-      await chrome.scripting.unregisterContentScripts({ ids: ["already"] });
-    }
-    return;
-  }
-  const script = {
-    id: "already",
-    matches: sites.map((h) => "*://" + h + "/*"),
-    js: ["lib.js", "content.js"],
-    css: ["content.css"],
-    runAt: "document_idle"
-  };
-  if (existing.length) await chrome.scripting.updateContentScripts([script]);
-  else await chrome.scripting.registerContentScripts([script]);
-}
-
 $("toggle").addEventListener("change", async (e) => {
   const { sites = [] } = await chrome.storage.local.get("sites");
   if (e.target.checked) {
@@ -101,9 +80,6 @@ $("toggle").addEventListener("change", async (e) => {
     } catch { }
   }
   await chrome.storage.local.set({ sites });
-  try {
-    await syncScripts(sites);
-  } catch { }
   setLamp(e.target.checked);
 });
 
