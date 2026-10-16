@@ -48,8 +48,36 @@ function pruneArticles(map, today, retentionDays) {
   return out;
 }
 
+// Listing ID patterns per classifieds site
+const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+const LISTING_SITES = [
+  { host: /(^|\.)mobile\.de$/,
+    urls: [/\/details\.html\?(?:.*&)?id=(\d+)/, /\/auto-inserat\/[^/]+\/(\d+)\.html/] },
+  // Cards link via JS, not href
+  { host: /(^|\.)autoscout24\.\w+$/,
+    urls: [new RegExp("\\/(?:angebote|smyle\\/details)\\/(?:.*-)?(" + UUID + ")")],
+    card: "article[data-guid]", attr: "data-guid" },
+  { host: /(^|\.)autouncle\.\w+$/,
+    urls: [/\/d\/(\d+)/, /\/das_wiedersehen\/[^/]+\/(\d+)/] }
+];
+
+function listingSite(host) {
+  return LISTING_SITES.find((s) => s.host.test(host)) || null;
+}
+
+function listingKey(site, href) {
+  let u;
+  try { u = new URL(href); } catch { return null; }
+  const s = u.pathname + u.search;
+  for (const re of site.urls) {
+    const m = s.match(re);
+    if (m) return m[1];
+  }
+  return null;
+}
+
 const AlreadyLib = { STRIP_PARAMS, normalizeUrl, isArticleHref, isHeadlineText,
-  dayNumber, shouldGrey, pruneArticles
+  dayNumber, shouldGrey, pruneArticles, listingSite, listingKey
 };
 globalThis.AlreadyLib = AlreadyLib;
 // CJS export for node tests

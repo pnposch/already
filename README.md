@@ -20,6 +20,24 @@ and fades it out — so only the new survives.
 
 ![Before and after](store-assets/screenshot-2.png)
 
+## Car listings
+
+On used-car sites, Already tracks listings by their ID, so the
+same car stays faded across searches, sort orders and tracking
+parameters.
+
+| Site | Enable on |
+|---|---|
+| mobile.de | `suchen.mobile.de` |
+| AutoScout24 | `www.autoscout24.de` (any country domain) |
+| AutoUncle | `www.autouncle.de` (any country domain) |
+
+To hide a listing after a single sighting, set *Views before fade*
+to 1 and *Fade mode* to Hide. Settings apply to all sites.
+
+The same car on two sites counts as two listings. mobile.de blocks
+automated testing, so its support is untested.
+
 ## Private by design
 
 - Runs **only on sites you enable**, one by one. Disabling a site
